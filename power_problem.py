@@ -30,6 +30,7 @@ file = open("power_data.csv")
 reader = csv.reader(file, delimiter = ",")
 all_data = []
 zipcode = []
+my_zipcode = []
 data = []
 for line in reader:
     all_data.append(line)
@@ -38,10 +39,16 @@ for i in range(len(all_data)):
     if all_data[i][4] == "Bundled":
         data.append(all_data[i])
 data.sort(key = itemgetter(0))
-print(data)
 for j in range(len(data)):
     if data[j][0] == "60657":
-        print("The average residential rate for " + str(60657) + " is " + str(data[j][8]))
+        my_zipcode.append(float(data[j][8]))
+total = 0
+print(my_zipcode)
+for l in range(len(my_zipcode)):
+    total += my_zipcode[l]
+
+average = total/len(my_zipcode)
+print("The average residential rate for " + str(60657) + " is " + str(total))
 
 #2 What is the MEDIAN rate for all BUNDLED RESIDENTIAL rates in Illinois?
 # Use the data you extracted to check all "IL" zipcodes to answer this. (10pts)
@@ -50,10 +57,9 @@ IL_zip = []
 for k in range(len(data)):
     if data[k][3] == "IL":
         IL_zip.append(data[k])
-print(IL_zip)
 
 IL_zip.sort(key = itemgetter(8))
-print(IL_zip)
+print("The median rate of the bundled residential rates in Illinois is: " + str(IL_zip[len(IL_zip)//2][8]))
 
 #3 What city in Illinois has the lowest residential rate?  Which has the highest?
 # You will need to go through the database and compare each value for this one.
