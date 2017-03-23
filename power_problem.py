@@ -26,22 +26,24 @@ This rate includes transmission fees and grid fees that are part of the true rat
 # You will need to read the power_data into your program to answer this.  (7pts)
 import csv
 from operator import itemgetter
-file = open("power_data.csv")
-reader = csv.reader(file, delimiter = ",")
+power_data = open("power_data.csv")
+def read(file, big_list, illinois):
+    reader = csv.reader(file, delimiter = ",")
+    for line in reader:
+        big_list.append(line)
+    for i in range(len(big_list)):
+        if big_list[i][3] == "IL":
+            illinois.append(big_list[i])
 all_data = []
-zipcode = []
 my_zipcode = []
 data = []
-for line in reader:
-    all_data.append(line)
+read(power_data, all_data, data)
 
-for i in range(len(all_data)):
-    if all_data[i][4] == "Bundled":
-        data.append(all_data[i])
 data.sort(key = itemgetter(0))
 for j in range(len(data)):
-    if data[j][0] == "60657":
+    if data[j][0] == "60657" and data[j][4] == "Bundled":
         my_zipcode.append(float(data[j][8]))
+
 total = 0
 print(my_zipcode)
 for l in range(len(my_zipcode)):
@@ -53,18 +55,29 @@ print("The average residential rate for " + str(60657) + " is " + str(total))
 #2 What is the MEDIAN rate for all BUNDLED RESIDENTIAL rates in Illinois?
 # Use the data you extracted to check all "IL" zipcodes to answer this. (10pts)
 
-IL_zip = []
+IL = []
 for k in range(len(data)):
     if data[k][3] == "IL":
-        IL_zip.append(data[k])
+        IL.append(data[k])
 
-IL_zip.sort(key = itemgetter(8))
-print("The median rate of the bundled residential rates in Illinois is: " + str(IL_zip[len(IL_zip)//2][8]))
+IL.sort(key = itemgetter(8))
+print("The median rate of the bundled residential rates in Illinois is: " + str(IL[len(IL)//2][8]))
 
 #3 What city in Illinois has the lowest residential rate?  Which has the highest?
 # You will need to go through the database and compare each value for this one.
 # Then you will need to reference the zipcode dataset to get the city.  (15pts)
 
+zip_file = open("free-zipcode-database-Primary.csv")
+zip_data = []
+zip_bundled = []
+
+read(zip_file, zip_data, zip_bundled)
+
+lowest_rate_zip = IL[0][0]
+highest_rate_zip = IL[len(IL)-1][0]
+print(lowest_rate_zip, highest_rate_zip)
+
+print(zip_bundled)
 
 #FOR #4  CHOOSE ONE OF THE FOLLOWING TWO PROBLEMS. The first one is easier than the second.
 #4  (Easier) USING ONLY THE ZIP CODE DATA...
